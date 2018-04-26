@@ -224,6 +224,10 @@
     return YES;
 }
 
+- (void)setLocalCapturer:(RTCCameraVideoCapturer *)localCapturer {
+    _localCapturer = localCapturer;
+}
+
 - (void)dealloc {
     [self removeAudioTracks];
     [self removeVideoTracks];
@@ -238,6 +242,8 @@
     RTCAVFoundationVideoSource *source =
     [_peerFactory avFoundationVideoSourceWithConstraints:_defaultVideoConstraints];
     localVideoTrack = [_peerFactory videoTrackWithSource:source trackId:kLicodeVideoLabel];
+    
+    self.localCapturer = [[RTCCameraVideoCapturer alloc] initWithDelegate:localVideoTrack.source];
 #endif
     return localVideoTrack;
 }
@@ -262,6 +268,10 @@
     for (RTCVideoTrack *localVideoTrack in _mediaStream.videoTracks) {
         [_mediaStream removeVideoTrack:localVideoTrack];
     }
+    
+    [self.localCapturer stopCapture];
+    self.localCapturer = nil;
+
 }
 
 @end

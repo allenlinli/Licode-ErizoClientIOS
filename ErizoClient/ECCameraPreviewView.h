@@ -17,8 +17,8 @@
 - (void)setLocalStream:(ECStream *)localStream withLocalCapturer:(RTCCameraVideoCapturer *)localCapturer;
 
 /// Local stream object that contains a media stream
-@property (strong, nonatomic) ECStream *localStream;
+@property (strong, nonatomic, readonly) ECStream *localStream;
 
-@property (strong, nonatomic) RTCCameraVideoCapturer *localCapturer;
+@property (strong, nonatomic, readonly) RTCCameraVideoCapturer *localCapturer;
 
 @end

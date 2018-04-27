@@ -206,9 +206,6 @@ static NSString * _Nonnull const kStreamOptionMaxAudioBW    = @"maxAudioBW";
 /// RTCMediaStream object that represent the stream a/v data.
 @property RTCMediaStream * _Nullable mediaStream;
 
-/// The RTCCameraVideoCapturer if this is a local stream.
-@property (strong, nonatomic,readonly) RTCCameraVideoCapturer * _Nullable localCapturer;
-
 /// Erizo stream id.
 @property NSString * _Nullable streamId;
 

@@ -1,12 +1,24 @@
 //
-//  ECCameraPreviewView.h
-//  ErizoClient
+//  ErizoClientIOS
 //
-//  Created by Allen and Kim on 2018/4/27.
+//  Copyright (c) 2018 Li Lin (allenlinli@gmail.com).
+//
+//  MIT License, see LICENSE file for details.
 //
 
 #import <UIKit/UIKit.h>
+@import WebRTC;
+#import "ECStream.h"
 
 @interface ECCameraPreviewView : UIView
+
+- (instancetype)initWithFrame:(CGRect)frame;
+
+- (void)setLocalStream:(ECStream *)localStream withLocalCapturer:(RTCCameraVideoCapturer *)localCapturer;
+
+/// Local stream object that contains a media stream
+@property (strong, nonatomic) ECStream *localStream;
+
+@property (strong, nonatomic) RTCCameraVideoCapturer *localCapturer;
 
 @end

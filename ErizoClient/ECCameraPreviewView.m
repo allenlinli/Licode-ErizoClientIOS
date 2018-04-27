@@ -1,20 +1,37 @@
 //
-//  ECCameraPreviewView.m
-//  ErizoClient
+//  ErizoClientIOS
 //
-//  Created by Allen and Kim on 2018/4/27.
+//  Copyright (c) 2018 Li Lin (allenlinli@gmail.com).
+//
+//  MIT License, see LICENSE file for details.
 //
 
+@import WebRTC;
 #import "ECCameraPreviewView.h"
+
+@interface ECCameraPreviewView()
+
+/// Stream object that contains a media stream
+@property (strong, nonatomic, readonly) RTCCameraPreviewView *cameraPreviewView;
+
+@end
 
 @implementation ECCameraPreviewView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        
+        _cameraPreviewView = [[RTCCameraPreviewView alloc] initWithFrame:frame];
+        [self addSubview:_cameraPreviewView];
+    }
+    return self;
 }
-*/
+
+- (void)setLocalStream:(ECStream *)localStream withLocalCapturer:(RTCCameraVideoCapturer *)localCapturer {
+    self.localCapturer = localCapturer;
+    self.localStream = localStream;
+}
 
 @end
+
+

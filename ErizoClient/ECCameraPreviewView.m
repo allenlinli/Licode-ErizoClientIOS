@@ -28,17 +28,19 @@
 
 - (instancetype)initWithFrame:(CGRect)frame localStream:(ECStream *)localStream withLocalCapturer:(RTCCameraVideoCapturer *)localCapturer {
     if (self = [self initWithFrame:frame]) {
-        [self setLocalStream:localStream withLocalCapturer:localCapturer];
+        [self setupWithLocalStream:localStream];
     }
     
     return self;
 }
 
-- (void)setLocalStream:(ECStream *)localStream withLocalCapturer:(RTCCameraVideoCapturer *)localCapturer {
-    _localCapturer = localCapturer;
+- (void)setupWithLocalStream:(ECStream *)localStream {
     _localStream = localStream;
     
-    self.cameraPreviewView.captureSession = localCapturer.captureSession;
+    if ([localStream.mediaStream.videoTracks.firstObject.source isKindOfClass:[RTCAVFoundationVideoSource class]]) {
+        RTCAVFoundationVideoSource *videoSource = (RTCAVFoundationVideoSource *) localStream.mediaStream.videoTracks.firstObject.source;
+        self.cameraPreviewView.captureSession = videoSource.captureSession;
+    }
 }
 
 @end

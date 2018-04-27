@@ -14,11 +14,9 @@
 
 - (instancetype)initWithFrame:(CGRect)frame;
 
-- (void)setLocalStream:(ECStream *)localStream withLocalCapturer:(RTCCameraVideoCapturer *)localCapturer;
+- (void)setupWithLocalStream:(ECStream *)localStream;
 
 /// Local stream object that contains a media stream
 @property (strong, nonatomic, readonly) ECStream *localStream;
-
-@property (strong, nonatomic, readonly) RTCCameraVideoCapturer *localCapturer;
 
 @end

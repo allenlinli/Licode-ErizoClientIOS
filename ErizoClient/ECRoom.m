@@ -19,6 +19,11 @@ static NSString * const kRTCStatsBytesSent       = @"bytesSent";
 static NSString * const kRTCStatsLastDate        = @"lastDate";
 static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
 
+@interface ECRoom()
+@property (strong, nonatomic, nullable) void (^publishLocalStreamSuccessHandler)(void);
+@property (strong, nonatomic, nullable) void (^publishLocalStreamFailureHandler)(NSError * error);
+@end
+
 @implementation ECRoom {
     ECClient *publishClient;
     NSMutableDictionary *p2pClients;
@@ -107,6 +112,8 @@ static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
 - (void)publish:(ECStream *)stream
         success:(void(^)(void))success
         failure:(void(^)(NSError * error))failure {
+    self.publishLocalStreamSuccessHandler = success;
+    self.publishLocalStreamFailureHandler = failure;
     
     // Create a ECClient instance to handle peer connection for this publishing.
     // It is very important to use the same factory.
@@ -256,6 +263,16 @@ static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
 - (void)signalingChannel:(ECSignalingChannel *)channel didError:(NSString *)reason {
     [_delegate room:self didError:ECRoomErrorSignaling reason:reason];
     self.status = ECRoomStatusError;
+    
+    NSString *errorString = @"No ACK received when publishing stream!";
+    if ([reason isEqualToString:errorString]) {
+        if (self.publishLocalStreamFailureHandler) {
+            NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:nil];
+            self.publishLocalStreamFailureHandler(error);
+            self.publishLocalStreamFailureHandler = nil;
+            self.publishLocalStreamSuccessHandler = nil;
+        }
+    }
 }
 
 - (void)signalingChannel:(ECSignalingChannel *)channel didConnectToRoom:(NSDictionary *)roomMeta {
@@ -290,6 +307,12 @@ static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
     L_DEBUG(@"Room: didReceiveStreamIdReadyToPublish streamId: %@", streamId);
     _publishStreamId = streamId;
     _publishStream.streamId = streamId;
+    
+    if (self.publishLocalStreamSuccessHandler) {
+        self.publishLocalStreamSuccessHandler();
+        self.publishLocalStreamSuccessHandler = nil;
+        self.publishLocalStreamFailureHandler = nil;
+    }
 }
 
 - (void)signalingChannel:(ECSignalingChannel *)channel didStartRecordingStreamId:(NSString *)streamId

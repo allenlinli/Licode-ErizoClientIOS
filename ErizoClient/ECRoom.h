@@ -352,6 +352,10 @@ typedef NS_ENUM(NSInteger, ECRoomErrorStatus) {
  Publishes a given ECStream with given options.
  
  @param stream The stream from where we will be publishing.
+
+ @param success A block object to be executed when the task finishes successfully. This block has no return value and takes no parameters.
+ 
+ @param failure A block object to be executed when the task finishes unsuccessfully. This block has no return value and takes one argument: the error object describing the error that occurred.
  
  @see ECRoomDelegate:room:didPublishStream:
  */

@@ -99,6 +99,31 @@ static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
     
     // Reset stats used for bitrateCalculation
     statsBySSRC = [NSMutableDictionary dictionary];
+    
+    // Ask for publish
+    [_signalingChannel publish:options signalingChannelDelegate:publishClient];
+}
+
+- (void)publish:(ECStream *)stream
+        success:(void(^)(void))success
+        failure:(void(^)(NSError * error))failure {
+    
+    // Create a ECClient instance to handle peer connection for this publishing.
+    // It is very important to use the same factory.
+    publishClient = [[ECClient alloc] initWithDelegate:self
+                                           peerFactory:stream.peerFactory
+                                              streamId:nil
+                                          peerSocketId:nil
+                                               options:[self getClientOptionsWithStream:stream]];
+    
+    // Keep track of the stream that this room will be publishing
+    _publishStream = stream;
+    
+    NSMutableDictionary *options = [stream.streamOptions mutableCopy];
+    [options setObject:stream.streamAttributes forKey:@"attributes"];
+    
+    // Reset stats used for bitrateCalculation
+    statsBySSRC = [NSMutableDictionary dictionary];
 
     // Ask for publish
     [_signalingChannel publish:options signalingChannelDelegate:publishClient];

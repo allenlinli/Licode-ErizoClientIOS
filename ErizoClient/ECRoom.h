@@ -349,6 +349,17 @@ typedef NS_ENUM(NSInteger, ECRoomErrorStatus) {
 - (void)publish:(ECStream *)stream;
 
 /**
+ Publishes a given ECStream with given options.
+ 
+ @param stream The stream from where we will be publishing.
+ 
+ @see ECRoomDelegate:room:didPublishStream:
+ */
+- (void)publish:(ECStream *)stream
+        success:(void(^)(void))success
+        failure:(void(^)(NSError * error))failure;
+
+/**
  Un-Publish the stream being published.
 */
 - (void)unpublish;

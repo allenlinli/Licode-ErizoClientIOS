@@ -261,7 +261,6 @@ static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
 }
 
 - (void)signalingChannel:(ECSignalingChannel *)channel didError:(NSString *)reason {
-    [_delegate room:self didError:ECRoomErrorSignaling reason:reason];
     self.status = ECRoomStatusError;
     
     NSString *errorString = @"No ACK received when publishing stream!";
@@ -272,7 +271,11 @@ static NSString * const kRTCStatsMediaTypeKey    = @"mediaType";
             self.publishLocalStreamFailureHandler = nil;
             self.publishLocalStreamSuccessHandler = nil;
         }
+        
+        return;
     }
+    
+    [_delegate room:self didError:ECRoomErrorSignaling reason:reason];
 }
 
 - (void)signalingChannel:(ECSignalingChannel *)channel didConnectToRoom:(NSDictionary *)roomMeta {

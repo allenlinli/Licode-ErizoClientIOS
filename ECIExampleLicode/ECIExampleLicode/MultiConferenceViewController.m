@@ -186,6 +186,15 @@ static CGFloat vHeight = 120.0;
     // Initialize room (without token!)
     remoteRoom = [[ECRoom alloc] initWithDelegate:self
                                    andPeerFactory:[[RTCPeerConnectionFactory alloc] init]];
+    [[LicodeServer sharedInstance] obtainMultiVideoConferenceToken:username
+                                                        completion:^(BOOL result, NSString *token) {
+                                                            if (result) {
+                                                                // Connect with the Room
+                                                                [remoteRoom connectWithEncodedToken:token];
+                                                            } else {
+                                                                [self showCallConnectViews:YES updateStatusMessage:@"Token fetch failed"];
+                                                            }
+                                                        }];
 
     /*
 

@@ -13,8 +13,8 @@
 	+(void)setAllowsAnyHTTPSCertificate:(BOOL) allow forHost:(NSString*) host;
 @end
 
-static NSString *kLicodeServerURLString = @"https://chotis2.dit.upm.es/token";
-static NSString *kLicodeRoomId = @"57ced7acb831f12276f1afcc";
+static NSString *kLicodeServerURLString = @"http://35.229.212.34:3001/createToken";
+//static NSString *kLicodeRoomId = @"57ced7acb831f12276f1afcc";
 static NSString *kLicodeServerTokenJSONNameSpace = @"";
 static NSString *kLicodeServerTokenJSONField = @"";
 
@@ -32,7 +32,8 @@ static NSString *kLicodeServerTokenJSONField = @"";
 - (void)obtainMultiVideoConferenceToken:(NSString *)username completion:(void (^)(BOOL, NSString *))completion {
 	NSDictionary *postData = @{
 							   @"role": @"presenter",
-							   @"roomId": kLicodeRoomId,
+							   @"roomId": @"basicExampleRoom",
+                               @"type": @"erizo",
 							   @"username": username
 							   };
 	NSMutableURLRequest *request = [self buildRequest:kLicodeServerURLString method:@"POST" postData:postData];
